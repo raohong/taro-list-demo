@@ -89,7 +89,7 @@ const config = {
     }
   },
   h5: {
-    publicPath: './',
+    publicPath: 'https://raohong.github.io/taro-list-demo/dist/',
     staticDirectory: 'assets',
     webpack: {
       alisa: {}
