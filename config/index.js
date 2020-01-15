@@ -2,7 +2,7 @@
 const { join } = require('path');
 
 const config = {
-  projectName: 'taro-list',
+  projectName: 'taro-list-demo',
   date: '2019-12-30',
   designWidth: 750,
   deviceRatio: {
@@ -89,7 +89,7 @@ const config = {
     }
   },
   h5: {
-    publicPath: '',
+    publicPath: './',
     staticDirectory: 'assets',
     webpack: {
       alisa: {}
