@@ -89,7 +89,7 @@ const config = {
     }
   },
   h5: {
-    publicPath: '/',
+    publicPath: '',
     staticDirectory: 'assets',
     webpack: {
       alisa: {}
