@@ -80,7 +80,7 @@
     "typescript": "^3.0.1"
   },
   "dependencies": {
-    "taro-list": "^0.3.1",
+    "taro-list": "^0.3.4",
     "taro-list-data-manager": "^0.2.4"
   }
 }
