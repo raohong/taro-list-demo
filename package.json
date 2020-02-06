@@ -1,7 +1,7 @@
 {
   "name": "taro-list-demo",
   "private": true,
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "taro-list demo",
   "templateInfo": {
     "name": "default",
@@ -9,7 +9,6 @@
     "css": "less"
   },
   "scripts": {
-    "build": "cross-env TARO_BUILD_TYPE=ui taro build --ui & node ./scripts/build.js",
     "prettier": "prettier --config .prettierrc --write \"./{src,tests}/**/*.{less,ts,tsx,js}\" \"!./{build.dist}/**\"",
     "lint-staged": "lint-staged",
     "build:weapp": "taro build --type weapp",
