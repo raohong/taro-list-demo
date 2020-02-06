@@ -65,15 +65,11 @@ export default class List extends Taro.Component<any, ListState> {
       if (list.length) {
         this.page += 1;
       } else {
-        const total = this.dataManager.get().length;
+        // 这里标识没有更多了
+        this.loadStatus = 'ended';
 
-        this.dataManager.updateConfig({
-          itemSize: index => (index === total - 1 ? '140rpx' : '240rpx')
-        });
-        this.dataManager.setLoadStatus({
-          type: 'ended'
-        });
-        // 没有更多了
+        // 02-05 更新
+        this.dataManager.setLoadStatus({ type: 'ened' }, '140rpx');
       }
     });
   };

@@ -22,7 +22,13 @@ interface ColumnListState {
   list: VirutalListItemData[];
 }
 
-type LoadStatus = 'none' | 'loadMore' | 'ended' | 'loading' | 'refreshing';
+type LoadStatus =
+  | 'none'
+  | 'loadMore'
+  | 'ended'
+  | 'loading'
+  | 'refreshing'
+  | 'noData';
 
 const HEIGHT = '410rpx';
 
@@ -38,6 +44,7 @@ export default class List extends Taro.Component<any, ColumnListState> {
     {
       itemSize: HEIGHT,
       overscan: 5,
+      estimatedSize: 70,
       column: 2,
       onChange: data => {
         this.setState({
@@ -49,36 +56,67 @@ export default class List extends Taro.Component<any, ColumnListState> {
   );
 
   componentDidMount() {
-    this.fetch();
+    this.loadStatus = 'loading';
+    this.dataManager.setLoadStatus(
+      {
+        type: 'loading'
+      },
+      '140rpx'
+    );
+
+    console.log('XXinit');
+    this.refresh();
   }
 
-  fetch = (cb?: (data: any[]) => void) => {
-    return getTopic(this.page).then(({ data }) => {
-      const list: any[] = data.data || [];
+  count = 0;
 
-      if (typeof cb === 'function') {
-        cb(list);
+  refresh = () => {
+    this.count = 0;
+
+    return this.fetch().then(({ list, status }) => {
+      // 请求结束后 清空所有加载状态 复原 itemSize
+      console.log('resolved');
+      this.dataManager.clearAllLoadStatus();
+      this.dataManager.updateConfig({
+        itemSize: HEIGHT
+      });
+
+      if (status !== 'none') {
+        this.dataManager.clear();
+        this.dataManager.setLoadStatus({ type: status }, '140rpx');
       } else {
-        if (this.page === 1) {
-          this.dataManager.set(list);
-        } else {
-          this.dataManager.push(...list);
-        }
+        this.dataManager.set(list);
       }
 
-      if (list.length) {
-        this.page += 1;
-      } else {
-        const total = this.dataManager.get().length;
+      this.loadStatus = status;
+    });
+  };
 
-        this.dataManager.updateConfig({
-          itemSize: index => (index === total - 1 ? '140rpx' : HEIGHT)
-        });
-        this.dataManager.setLoadStatus({
-          type: 'ended'
-        });
-        // 没有更多了
-      }
+  fetch = (): Promise<{ list: any[]; status: 'noData' | 'ended' | 'none' }> => {
+    return new Promise((resolve, reject) => {
+      getTopic(this.page)
+        .then(({ data }) => {
+          this.count++;
+          const list: any[] = data.data || [];
+          if (this.count === 3) {
+            list.length = 0;
+          }
+
+          if (list.length) {
+            this.page++;
+          }
+
+          resolve({
+            list,
+            status:
+              list.length === 0
+                ? this.page === 1
+                  ? 'noData'
+                  : 'ended'
+                : 'none'
+          });
+        })
+        .catch(reject);
     });
   };
 
@@ -96,29 +134,39 @@ export default class List extends Taro.Component<any, ColumnListState> {
       '140rpx'
     );
 
-    this.fetch(list => {
+    this.fetch().then(({ list, status }) => {
+      this.loadStatus = status;
       clearAndAddData(...list);
-      this.loadStatus = 'none';
+
+      if (status !== 'none') {
+        console.log('ended');
+        this.dataManager.setLoadStatus(
+          {
+            type: 'ended'
+          },
+          '140rpx'
+        );
+      }
     });
   };
 
   handleRefresh = cb => {
-    if (this.loadStatus == 'refreshing') {
+    if (this.loadStatus !== 'none') {
       return;
     }
 
     this.page = 1;
     this.loadStatus = 'refreshing';
+
+    // 刷新时 清空所有加载状态 复原 itemSize
     this.dataManager.clearAllLoadStatus();
     this.dataManager.updateConfig({
       itemSize: HEIGHT
     });
 
-    this.fetch()
+    this.refresh()
       .then(cb)
-      .then(() => {
-        this.loadStatus = 'none';
-      });
+      .catch(cb);
   };
 
   render() {
@@ -149,6 +197,10 @@ export default class List extends Taro.Component<any, ColumnListState> {
             ) : item.item[0].type === 'ended' ? (
               <View className='loadStatus' style={item.style}>
                 没有更多了
+              </View>
+            ) : item.item[0].type === 'loading' ? (
+              <View className='loadStatus' style={item.style}>
+                加载中...
               </View>
             ) : (
               <View
