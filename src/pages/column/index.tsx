@@ -56,7 +56,9 @@ export default class List extends Taro.Component<any, ColumnListState> {
     Taro
   );
 
-  componentDidMount() {
+  count = 0;
+
+  onInit = () => {
     this.loadStatus = 'loading';
     this.dataManager.setLoadStatus(
       {
@@ -66,9 +68,7 @@ export default class List extends Taro.Component<any, ColumnListState> {
     );
 
     this.refresh();
-  }
-
-  count = 0;
+  };
 
   refresh = () => {
     this.count = 0;
@@ -183,6 +183,7 @@ export default class List extends Taro.Component<any, ColumnListState> {
       <View className='page column-page'>
         <TaroList
           onRefresh={this.handleRefresh}
+          onVirtualListInit={this.onInit}
           onLoadMore={this.handleLoadMore}
           virtual
           height='100vh'

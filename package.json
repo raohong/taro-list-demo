@@ -79,7 +79,7 @@
     "typescript": "^3.7.5"
   },
   "dependencies": {
-    "taro-list": "^1.0.0",
-    "taro-list-data-manager": "^0.2.5"
+    "taro-list": "^1.0.2",
+    "taro-list-data-manager": "^0.2.6"
   }
 }

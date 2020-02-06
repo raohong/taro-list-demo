@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro';
-import { View, Image } from '@tarojs/components';
+import { View } from '@tarojs/components';
 import {
   VirutalListDataManager,
   VirutalListItemData
@@ -23,11 +23,17 @@ interface ListState {
 
 const HEIGHT = '240rpx';
 
-type LoadStatus = 'none' | 'loadMore' | 'ended' | 'loading' | 'refreshing';
+type LoadStatus =
+  | 'none'
+  | 'loadMore'
+  | 'noData'
+  | 'ended'
+  | 'loading'
+  | 'refreshing';
 
 export default class List extends Taro.Component<any, ListState> {
   page = 1;
-  state: ColumnListState = {
+  state: ListState = {
     list: []
   };
 
@@ -48,7 +54,9 @@ export default class List extends Taro.Component<any, ListState> {
     Taro
   );
 
-  componentDidMount() {
+  count = 0;
+
+  onInit = () => {
     this.loadStatus = 'loading';
     this.dataManager.setLoadStatus(
       {
@@ -58,9 +66,7 @@ export default class List extends Taro.Component<any, ListState> {
     );
 
     this.refresh();
-  }
-
-  count = 0;
+  };
 
   refresh = () => {
     this.count = 0;
@@ -176,6 +182,7 @@ export default class List extends Taro.Component<any, ListState> {
         <TaroList
           onRefresh={this.handleRefresh}
           onLoadMore={this.handleLoadMore}
+          onVirtualListInit={this.onInit}
           virtual
           height='100vh'
           dataManager={this.dataManager}
