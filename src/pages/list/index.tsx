@@ -79,39 +79,15 @@ export default class List extends Taro.Component<any, ListState> {
         this.dataManager.set(list);
       }
 
-      this.loadStatus = status;
-    });
-  };
+      if (list.length) {
+        this.page += 1;
+      } else {
+        // 这里标识没有更多了
+        this.loadStatus = 'ended';
 
-  fetch = (): Promise<{
-    list: any[];
-    status: 'noData' | 'ended' | 'none';
-  }> => {
-    return new Promise((resolve, reject) => {
-      getTopic(this.page)
-        .then(({ data }) => {
-          this.count++;
-          const list: any[] = data.data || [];
-          // 这里模仿数据记载完
-          if (this.count === 10) {
-            list.length = 0;
-          }
-
-          if (list.length) {
-            this.page++;
-          }
-
-          resolve({
-            list,
-            status:
-              list.length === 0
-                ? this.page === 1
-                  ? 'noData'
-                  : 'ended'
-                : 'none'
-          });
-        })
-        .catch(reject);
+        // 02-05 更新
+        this.dataManager.setLoadStatus({ type: 'ened' }, '140rpx');
+      }
     });
   };
 
