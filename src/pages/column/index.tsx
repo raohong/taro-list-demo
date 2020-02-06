@@ -44,6 +44,7 @@ export default class List extends Taro.Component<any, ColumnListState> {
     {
       itemSize: HEIGHT,
       overscan: 5,
+      // estimatedSize 尽可能接近真实尺寸
       estimatedSize: 70,
       column: 2,
       onChange: data => {
@@ -64,7 +65,6 @@ export default class List extends Taro.Component<any, ColumnListState> {
       '140rpx'
     );
 
-    console.log('XXinit');
     this.refresh();
   }
 
@@ -75,7 +75,6 @@ export default class List extends Taro.Component<any, ColumnListState> {
 
     return this.fetch().then(({ list, status }) => {
       // 请求结束后 清空所有加载状态 复原 itemSize
-      console.log('resolved');
       this.dataManager.clearAllLoadStatus();
       this.dataManager.updateConfig({
         itemSize: HEIGHT
@@ -98,7 +97,8 @@ export default class List extends Taro.Component<any, ColumnListState> {
         .then(({ data }) => {
           this.count++;
           const list: any[] = data.data || [];
-          if (this.count === 3) {
+          // 这里模仿数据记载完
+          if (this.count === 10) {
             list.length = 0;
           }
 
@@ -139,7 +139,6 @@ export default class List extends Taro.Component<any, ColumnListState> {
       clearAndAddData(...list);
 
       if (status !== 'none') {
-        console.log('ended');
         this.dataManager.setLoadStatus(
           {
             type: 'ended'
