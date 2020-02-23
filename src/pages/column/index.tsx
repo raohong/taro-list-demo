@@ -1,8 +1,8 @@
 import Taro from '@tarojs/taro';
 import { View } from '@tarojs/components';
 import {
-  VirutalListDataManager,
-  VirutalListItemData
+  VirtualListDataManager,
+  VirtualListItemData
 } from 'taro-list-data-manager';
 import TaroList from 'taro-list';
 
@@ -19,7 +19,7 @@ function getTopic(page: number) {
 }
 
 interface ColumnListState {
-  list: VirutalListItemData[];
+  list: VirtualListItemData[];
 }
 
 type LoadStatus =
@@ -40,7 +40,7 @@ export default class List extends Taro.Component<any, ColumnListState> {
 
   loadStatus: LoadStatus = 'none';
 
-  dataManager = new VirutalListDataManager(
+  dataManager = new VirtualListDataManager(
     {
       itemSize: HEIGHT,
       overscan: 5,

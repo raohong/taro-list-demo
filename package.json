@@ -79,6 +79,6 @@
     "typescript": "^3.7.5"
   },
   "dependencies": {
-    "taro-list": "^1.0.6"
+    "taro-list": "^1.0.7"
   }
 }
