@@ -42,9 +42,10 @@ export default class List extends Taro.Component<any, ListState> {
   dataManager = new VirtualListDataManager(
     {
       itemSize: HEIGHT,
-      overscan: 5,
+      // 可以适当增大 避免快速滑动白屏
+      overscan: 30,
       // estimatedSize 尽可能接近真实尺寸
-      estimatedSize: 70,
+      estimatedSize: 120,
       onChange: data => {
         this.setState({
           list: data

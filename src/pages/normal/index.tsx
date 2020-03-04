@@ -23,6 +23,8 @@ export default class List extends Taro.Component<any, NormalListState> {
   dataManager = new VirtualListDataManager<number>(
     {
       itemSize: 50,
+      estimatedSize: 50,
+      overscan: 14 * 3,
       onChange: data => {
         this.setState({
           list: data
@@ -31,15 +33,17 @@ export default class List extends Taro.Component<any, NormalListState> {
     },
     Taro
   );
-  componentWillMount() {
-    for (let i = 0; i < 10; i++) {
-      this.add(i * 200);
-    }
-  }
+
   add = (start = 0) => {
     const data = Array.from({ length: 2000 }, (_, i) => start + i);
 
     this.dataManager.push(...data);
+  };
+
+  handleInit = () => {
+    for (let i = 0; i < 10; i++) {
+      this.add(i * 200);
+    }
   };
 
   handleBlur = evt => {
@@ -68,13 +72,14 @@ export default class List extends Taro.Component<any, NormalListState> {
           />
         </View>
         <TaroList
+          onVirtualListInit={this.handleInit}
           scrollToIndex={scrollToIndex}
           virtual
           height='90vh'
           dataManager={this.dataManager}
         >
           {list.map(item => (
-            <View style={item.style} className='item'>
+            <View style={item.style} key={item.item} className='item'>
               #{item.index}
             </View>
           ))}

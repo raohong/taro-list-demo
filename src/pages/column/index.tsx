@@ -43,9 +43,10 @@ export default class List extends Taro.Component<any, ColumnListState> {
   dataManager = new VirtualListDataManager(
     {
       itemSize: HEIGHT,
-      overscan: 5,
+      // 可以适当增大 避免快速滑动白屏
+      overscan: 30,
       // estimatedSize 尽可能接近真实尺寸
-      estimatedSize: 70,
+      estimatedSize: 120,
       column: 2,
       onChange: data => {
         this.setState({
@@ -91,7 +92,10 @@ export default class List extends Taro.Component<any, ColumnListState> {
     });
   };
 
-  fetch = (): Promise<{ list: any[]; status: 'noData' | 'ended' | 'none' }> => {
+  fetch = (): Promise<{
+    list: any[];
+    status: 'noData' | 'ended' | 'none';
+  }> => {
     return new Promise((resolve, reject) => {
       getTopic(this.page)
         .then(({ data }) => {
