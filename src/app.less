@@ -4,15 +4,23 @@
   line-height: 1.5;
 }
 
-view, image {
+view,
+image {
   box-sizing: border-box;
 }
 
-div, img{
+div,
+img {
   box-sizing: border-box;
 }
 
-
-body,page {
+body,
+page {
   font-size: 28px;
+}
+
+:root,
+page {
+  --padding-bottom: env(safe-area-inset-bottom);
+  --padding-top: env(safe-area-inset-top);
 }

@@ -2,7 +2,7 @@ import Taro from '@tarojs/taro';
 import { View, Input } from '@tarojs/components';
 import {
   VirtualListDataManager,
-  VirtualListItemData
+  VirtualListItemData,
 } from 'taro-list-data-manager';
 import TaroList from 'taro-list';
 
@@ -17,7 +17,7 @@ export default class List extends Taro.Component<any, NormalListState> {
   page = 1;
   state: NormalListState = {
     list: [],
-    scrollToIndex: undefined
+    scrollToIndex: undefined,
   };
 
   dataManager = new VirtualListDataManager<number>(
@@ -25,11 +25,11 @@ export default class List extends Taro.Component<any, NormalListState> {
       itemSize: 50,
       estimatedSize: 50,
       overscan: 14 * 3,
-      onChange: data => {
+      onChange: (data) => {
         this.setState({
-          list: data
+          list: data,
         });
-      }
+      },
     },
     Taro
   );
@@ -46,14 +46,14 @@ export default class List extends Taro.Component<any, NormalListState> {
     }
   };
 
-  handleBlur = evt => {
+  handleBlur = (evt) => {
     const { value } = evt.detail;
 
     const index = parseInt(value);
 
     if (!isNaN(index)) {
       this.setState({
-        scrollToIndex: index
+        scrollToIndex: index,
       });
     }
   };
@@ -75,10 +75,10 @@ export default class List extends Taro.Component<any, NormalListState> {
           onVirtualListInit={this.handleInit}
           scrollToIndex={scrollToIndex}
           virtual
-          height='90vh'
+          height={`calc(90vh - var(--padding-bottom) - var(--padding-top))`}
           dataManager={this.dataManager}
         >
-          {list.map(item => (
+          {list.map((item) => (
             <View style={item.style} key={item.item} className='item'>
               #{item.index}
             </View>

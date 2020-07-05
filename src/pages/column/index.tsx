@@ -2,7 +2,7 @@ import Taro from '@tarojs/taro';
 import { View } from '@tarojs/components';
 import {
   VirtualListDataManager,
-  VirtualListItemData
+  VirtualListItemData,
 } from 'taro-list-data-manager';
 import TaroList from 'taro-list';
 
@@ -13,8 +13,8 @@ function getTopic(page: number) {
     method: 'GET',
     url: 'https://cnodejs.org/api/v1/topics',
     data: {
-      page
-    }
+      page,
+    },
   });
 }
 
@@ -35,7 +35,7 @@ const HEIGHT = '410rpx';
 export default class List extends Taro.Component<any, ColumnListState> {
   page = 1;
   state: ColumnListState = {
-    list: []
+    list: [],
   };
 
   loadStatus: LoadStatus = 'none';
@@ -48,11 +48,11 @@ export default class List extends Taro.Component<any, ColumnListState> {
       // estimatedSize 尽可能接近真实尺寸
       estimatedSize: 120,
       column: 2,
-      onChange: data => {
+      onChange: (data) => {
         this.setState({
-          list: data
+          list: data,
         });
-      }
+      },
     },
     Taro
   );
@@ -63,7 +63,7 @@ export default class List extends Taro.Component<any, ColumnListState> {
     this.loadStatus = 'loading';
     this.dataManager.setLoadStatus(
       {
-        type: 'loading'
+        type: 'loading',
       },
       '140rpx'
     );
@@ -78,7 +78,7 @@ export default class List extends Taro.Component<any, ColumnListState> {
       // 请求结束后 清空所有加载状态 复原 itemSize
       this.dataManager.clearAllLoadStatus();
       this.dataManager.updateConfig({
-        itemSize: HEIGHT
+        itemSize: HEIGHT,
       });
 
       if (status !== 'none') {
@@ -117,7 +117,7 @@ export default class List extends Taro.Component<any, ColumnListState> {
                 ? this.page === 1
                   ? 'noData'
                   : 'ended'
-                : 'none'
+                : 'none',
           });
         })
         .catch(reject);
@@ -133,7 +133,7 @@ export default class List extends Taro.Component<any, ColumnListState> {
     this.loadStatus = 'loadMore';
     const { clearAndAddData } = this.dataManager.setLoadStatus(
       {
-        type: 'loadMore'
+        type: 'loadMore',
       },
       '140rpx'
     );
@@ -145,7 +145,7 @@ export default class List extends Taro.Component<any, ColumnListState> {
       if (status !== 'none') {
         this.dataManager.setLoadStatus(
           {
-            type: 'ended'
+            type: 'ended',
           },
           '140rpx'
         );
@@ -153,7 +153,7 @@ export default class List extends Taro.Component<any, ColumnListState> {
     });
   };
 
-  handleRefresh = cb => {
+  handleRefresh = (cb) => {
     if (this.loadStatus !== 'none') {
       return;
     }
@@ -164,19 +164,17 @@ export default class List extends Taro.Component<any, ColumnListState> {
     // 刷新时 清空所有加载状态 复原 itemSize
     this.dataManager.clearAllLoadStatus();
     this.dataManager.updateConfig({
-      itemSize: HEIGHT
+      itemSize: HEIGHT,
     });
 
-    this.refresh()
-      .then(cb)
-      .catch(cb);
+    this.refresh().then(cb).catch(cb);
   };
 
   render() {
     const { list } = this.state;
 
-    list.forEach(item => {
-      item.item.forEach(topic => {
+    list.forEach((item) => {
+      item.item.forEach((topic) => {
         if (!topic.type) {
           topic.avatarUrl = `url(${topic.author.avatar_url}) no-repeat center / cover`;
         }
@@ -190,10 +188,10 @@ export default class List extends Taro.Component<any, ColumnListState> {
           onVirtualListInit={this.onInit}
           onLoadMore={this.handleLoadMore}
           virtual
-          height='100vh'
+          height={`calc(100vh - var(--padding-bottom) - var(--padding-top))`}
           dataManager={this.dataManager}
         >
-          {list.map(item =>
+          {list.map((item) =>
             item.item[0].type === 'loadMore' ? (
               <View className='loadStatus' style={item.style}>
                 加载更多...
@@ -209,7 +207,7 @@ export default class List extends Taro.Component<any, ColumnListState> {
             ) : (
               <View
                 style={{
-                  ...item.style
+                  ...item.style,
                 }}
                 key={item.index}
                 className='topic-column'
@@ -219,7 +217,7 @@ export default class List extends Taro.Component<any, ColumnListState> {
                     <View className='topic-item-inner'>
                       <View
                         style={{
-                          background: topic.avatarUrl
+                          background: topic.avatarUrl,
                         }}
                         className='topic-item__avatar'
                       />

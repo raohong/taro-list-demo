@@ -2,7 +2,7 @@ import Taro from '@tarojs/taro';
 import { View } from '@tarojs/components';
 import {
   VirtualListDataManager,
-  VirtualListItemData
+  VirtualListItemData,
 } from 'taro-list-data-manager';
 import TaroList from 'taro-list';
 import './index.less';
@@ -12,8 +12,8 @@ function getTopic(page: number) {
     method: 'GET',
     url: 'https://cnodejs.org/api/v1/topics',
     data: {
-      page
-    }
+      page,
+    },
   });
 }
 
@@ -34,7 +34,7 @@ type LoadStatus =
 export default class List extends Taro.Component<any, ListState> {
   page = 1;
   state: ListState = {
-    list: []
+    list: [],
   };
 
   loadStatus: LoadStatus = 'none';
@@ -46,11 +46,11 @@ export default class List extends Taro.Component<any, ListState> {
       overscan: 30,
       // estimatedSize 尽可能接近真实尺寸
       estimatedSize: 120,
-      onChange: data => {
+      onChange: (data) => {
         this.setState({
-          list: data
+          list: data,
         });
-      }
+      },
     },
     Taro
   );
@@ -61,7 +61,7 @@ export default class List extends Taro.Component<any, ListState> {
     this.loadStatus = 'loading';
     this.dataManager.setLoadStatus(
       {
-        type: 'loading'
+        type: 'loading',
       },
       '140rpx'
     );
@@ -76,7 +76,7 @@ export default class List extends Taro.Component<any, ListState> {
       // 请求结束后 清空所有加载状态 复原 itemSize
       this.dataManager.clearAllLoadStatus();
       this.dataManager.updateConfig({
-        itemSize: HEIGHT
+        itemSize: HEIGHT,
       });
 
       if (status !== 'none') {
@@ -115,7 +115,7 @@ export default class List extends Taro.Component<any, ListState> {
                 ? this.page === 1
                   ? 'noData'
                   : 'ended'
-                : 'none'
+                : 'none',
           });
         })
         .catch(reject);
@@ -131,7 +131,7 @@ export default class List extends Taro.Component<any, ListState> {
     this.loadStatus = 'loadMore';
     const { clearAndAddData } = this.dataManager.setLoadStatus(
       {
-        type: 'loadMore'
+        type: 'loadMore',
       },
       '140rpx'
     );
@@ -143,7 +143,7 @@ export default class List extends Taro.Component<any, ListState> {
       if (status !== 'none') {
         this.dataManager.setLoadStatus(
           {
-            type: 'ended'
+            type: 'ended',
           },
           '140rpx'
         );
@@ -151,7 +151,7 @@ export default class List extends Taro.Component<any, ListState> {
     });
   };
 
-  handleRefresh = cb => {
+  handleRefresh = (cb) => {
     if (this.loadStatus !== 'none') {
       return;
     }
@@ -162,17 +162,15 @@ export default class List extends Taro.Component<any, ListState> {
     // 刷新时 清空所有加载状态 复原 itemSize
     this.dataManager.clearAllLoadStatus();
     this.dataManager.updateConfig({
-      itemSize: HEIGHT
+      itemSize: HEIGHT,
     });
 
-    this.refresh()
-      .then(cb)
-      .catch(cb);
+    this.refresh().then(cb).catch(cb);
   };
   render() {
     const { list } = this.state;
 
-    list.forEach(item => {
+    list.forEach((item) => {
       if (!item.item.type) {
         item.item.avatarUrl = `url(${item.item.author.avatar_url}) no-repeat center / cover`;
       }
@@ -185,10 +183,10 @@ export default class List extends Taro.Component<any, ListState> {
           onLoadMore={this.handleLoadMore}
           onVirtualListInit={this.onInit}
           virtual
-          height='100vh'
+          height={`calc(100vh - var(--padding-bottom) - var(--padding-top))`}
           dataManager={this.dataManager}
         >
-          {list.map(item =>
+          {list.map((item) =>
             item.item.type === 'loadMore' ? (
               <View className='loadStatus' style={item.style}>
                 加载更多...
@@ -206,13 +204,13 @@ export default class List extends Taro.Component<any, ListState> {
                 className='topic-item'
                 key={item.item.id}
                 style={{
-                  ...item.style
+                  ...item.style,
                 }}
               >
                 <View className='topic-item-inner'>
                   <View
                     style={{
-                      background: item.item.avatarUrl
+                      background: item.item.avatarUrl,
                     }}
                     className='topic-item__avatar'
                   />
