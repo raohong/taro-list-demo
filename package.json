@@ -55,7 +55,7 @@
     "@tarojs/taro-swan": "2.2.6",
     "@tarojs/taro-tt": "2.2.6",
     "@tarojs/taro-weapp": "2.2.6",
-    "@tarojs/webpack-runner": "2.2.6",
+    "@tarojs/webpack-runner": "3.5.7",
     "@types/jest": "^24.9.1",
     "@types/react": "^16.9.19",
     "@types/webpack-env": "^1.15.1",
